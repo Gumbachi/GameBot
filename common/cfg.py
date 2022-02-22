@@ -12,3 +12,12 @@ bot = discord.Bot(
 
 # The ids of the dev testing servers
 devguilds = [944304184335945759]
+
+
+class TENOR:
+    KERMIT_LOST = "https://tenor.com/view/kermit-the-frog-looking-for-directions-navigate-is-lost-gif-11835765"
+
+
+class EMOJI:
+    WEIRDCHAMP = "<:weirdchamp:945806052794957924>"
+    CHECK = "<:checkmark:833138608532750357>"
