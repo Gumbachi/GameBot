@@ -11,7 +11,12 @@ class MusicPlayer(discord.Cog):
         self.bot = bot
 
     @slash_command(name="play", guild_ids=devguilds)
-    async def howdy(self, ctx, song: str):
+    async def play(self, ctx, song: str):
+        """Command to start the music player."""
+        await ctx.respond(f"In progress!")
+
+    @slash_command(name="disconnect", guild_ids=devguilds)
+    async def dc(self, ctx, song: str):
         """Command to start the music player."""
         await ctx.respond(f"In progress!")
 
