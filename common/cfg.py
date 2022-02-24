@@ -20,4 +20,4 @@ class TENOR:
 
 class EMOJI:
     WEIRDCHAMP = "<:weirdchamp:945806052794957924>"
-    CHECK = "<:checkmark:833138608532750357>"
+    CHECK = "<:check:945808383632609341>"
