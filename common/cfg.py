@@ -12,3 +12,7 @@ bot = discord.Bot(
 
 # The ids of the dev testing servers
 devguilds = [944304184335945759]
+
+class EMOJI:
+    TAILS = "<:tails:946485039925956648>"
+    HEADS = "<:heads:946485030329401414>"
