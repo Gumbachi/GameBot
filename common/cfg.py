@@ -21,3 +21,8 @@ class TENOR:
 class EMOJI:
     WEIRDCHAMP = "<:weirdchamp:945806052794957924>"
     CHECK = "<:check:945808383632609341>"
+    PLAY = "▶️"
+    PAUSE = "⏸"
+    SKIP = "⏩"
+    REPEAT = "🔁"
+    REPEATONE = "🔂"

@@ -5,6 +5,7 @@ from common.cfg import devguilds
 from discord.commands import slash_command
 from yt_dlp import YoutubeDL
 from common.cfg import TENOR, EMOJI
+from .buttons import create_view
 import keys
 
 YDL_OPTS = {
@@ -23,8 +24,15 @@ YDL_OPTS = {
 
 FFMPEG_OPTS = {
     "executable": keys.FFMPEG_PATH,
-    # "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
+    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
     "options": "-vn",
+}
+
+TEST_SONG = {
+    "title": "TEST SONG",
+    "webpage_url": "https://www.google.com",
+    "duration": 203,
+    "thumbnail": "https://cdn.discordapp.com/attachments/944306171345535057/946476229597495366/goosebumps.png"
 }
 
 
@@ -35,7 +43,7 @@ class MusicPlayer(discord.Cog):
         self.bot = bot
 
     @staticmethod
-    def fetch_song(query: str) -> dict:
+    def fetch_song(query: str) -> dict | None:
         with YoutubeDL(YDL_OPTS) as ydl:
             song_info = ydl.extract_info(f"ytsearch:{query}", download=False)
             try:
@@ -58,7 +66,7 @@ class MusicPlayer(discord.Cog):
 
         player.add_field(
             name="UP NEXT",
-            value=f"[{song['TBD']}]({song['webpage_url']}\nETA: 1:23:45"
+            value=f"{song['title']}\nETA: 1:23:45"
         )
 
         return player
@@ -97,6 +105,13 @@ class MusicPlayer(discord.Cog):
         ctx.voice_client.play(audio)
 
         await ctx.respond(f"Playing {song['title']}")
+
+    @slash_command(name="test", guild_ids=devguilds)
+    async def test(self, ctx):
+        player = self.generate_player(TEST_SONG)
+
+        view = create_view()
+        await ctx.respond(embed=player, view=view)
 
 
 def setup(bot):
