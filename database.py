@@ -3,6 +3,7 @@ import random
 import string
 
 ID_Length = 16
+# Make sure that the path is correct for your computer.
 parent_path = "C:\\Users\\elizt\\PycharmProjects\\pythondb\\"
 
 
