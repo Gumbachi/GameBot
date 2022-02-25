@@ -4,7 +4,7 @@ import discord
 import keys
 import asyncio
 
-from common.cfg import EMOJI, devguilds
+from common.cfg import EMOJI, TENOR, devguilds
 from discord.commands import slash_command
 from discord.ext import tasks
 from discord.ext.commands import CommandError
@@ -19,9 +19,10 @@ class Music(discord.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.players = {}
+        self.player_loop.start()
 
     def get_player(self, guild):
-        """Return active song queue or make a new one."""
+        """Return active player or make a new one."""
 
         try:
             return self.players[guild.id]
@@ -50,6 +51,7 @@ class Music(discord.Cog):
             return await ctx.respond(EMOJI.WEIRDCHAMP)
 
         await ctx.voice_client.disconnect()
+        del self.players[ctx.guild.id]
         await ctx.respond(EMOJI.CHECK)
 
     @slash_command(name="play", guild_ids=devguilds)
@@ -59,37 +61,33 @@ class Music(discord.Cog):
         # Need to defer response since it takes time
         await ctx.interaction.response.defer()
 
-        await self.connect_to_voice(ctx)
+        try:
+            await self.connect_to_voice(ctx)
+        except CommandError:
+            return await ctx.respond(TENOR.KERMIT_LOST)
 
         song = Song.from_query(song)
-
         mp = self.get_player(ctx.guild)
         mp.enqueue(song)
 
-        mp.play_next()
+        await mp.play_next()
         await ctx.respond(embed=mp.embed, view=mp.controller)
 
-    # @tasks.loop(seconds=3.0)
-    # async def queue_timer(self):
-    #     """Checks the voice clients to see if one has stopped."""
-    #     for client in self.bot.voice_clients:
-    #         if client.is_playing():
-    #             continue
-    #         if (queue := SongQueue.get_queue(client.guild.id)):
-    #             if queue.paused:
-    #                 return
-    #             elif queue.loop:
-    #                 await self.play_song(client, queue.current_song)
-    #             else:
-    #                 # add song back onto queue if cycle is enabled
-    #                 if queue.cycle:
-    #                     queue.appendleft(queue.current_song)
+    @tasks.loop(seconds=5)
+    async def player_loop(self):
+        """Checks the voice clients to see if one can go to next song"""
+        for client in self.bot.voice_clients:
 
-    #                 await self.play_song(client, queue.pop())
+            # Voice client is already playing or paused so skip it
+            if client.is_playing() or client.is_paused():
+                continue
 
-    @slash_command(name="test", guild_ids=devguilds)
-    async def test(self, ctx):
-        pass
+            mp = self.get_player(client.guild)
+            await mp.play_next()
+
+    @player_loop.before_loop
+    async def before_player_loop(self):
+        await self.bot.wait_until_ready()  # Wait until the bot logs in
 
 
 def setup(bot):

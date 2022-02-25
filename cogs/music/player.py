@@ -68,12 +68,31 @@ class MusicPlayer():
     def enqueue(self, song: Song):
         self.songlist.append(song)
 
-    def play_next(self):
-        if self.empty:
+    async def play_next(self):
+
+        print(f"PLAYING NEXT: {self.repeat_type} {self.songlist}")
+
+        if self.empty and self.current is None:
+            await self.guild.voice_client.disconnect()
             return
 
-        self.current = self.songlist.pop(0)
+        # Repeat one should loop current song
+        if self.repeat_type == RepeatType.REPEATONE:
+            # do nothing because current will be played again
+            pass
 
+        # Repeat should loop the entire list
+        elif self.repeat_type == RepeatType.REPEAT:
+            self.current = self.songlist.pop(0)
+            self.songlist.append(self.current)
+
+        # Repeat off should just burn through the songs
+        else:
+            self.current = self.songlist.pop(0)
+
+        print(f"PLAYING: {self.current.title}")
+
+        # Play the song
         audio = discord.FFmpegPCMAudio(self.current.url, **FFMPEG_OPTS)
         self.guild.voice_client.play(audio)
         self.paused = False
@@ -85,3 +104,7 @@ class MusicPlayer():
     def pause(self):
         self.paused = True
         self.guild.voice_client.pause()
+
+    async def skip(self):
+        self.guild.voice_client.stop()
+        await self.play_next()

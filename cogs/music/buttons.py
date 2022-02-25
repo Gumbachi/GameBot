@@ -39,7 +39,7 @@ class SkipButton(Button):
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
-        await interaction.response.send_message("Song Skipped")
+        self.player.skip()
 
 
 class RepeatOffButton(Button):
