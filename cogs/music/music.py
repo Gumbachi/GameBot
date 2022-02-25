@@ -1,90 +1,47 @@
 import os
-import time
+
 import discord
-from common.cfg import devguilds
-from discord.commands import slash_command
-from yt_dlp import YoutubeDL
-from common.cfg import TENOR, EMOJI
-from .buttons import create_view
 import keys
+import asyncio
 
-YDL_OPTS = {
-    "format": "bestaudio/best",
-    "outtmpl": "%(extractor)s-%(id)s-%(title)s.%(ext)s",
-    "restrictfilenames": True,
-    "noplaylist": True,
-    "nocheckcertificate": True,
-    "ignoreerrors": False,
-    "logtostderr": False,
-    "quiet": True,
-    "no_warnings": True,
-    "default_search": "auto",
-    "source_address": "0.0.0.0",  # bind to ipv4
-}
+from common.cfg import EMOJI, devguilds
+from discord.commands import slash_command
+from discord.ext import tasks
+from discord.ext.commands import CommandError
 
-FFMPEG_OPTS = {
-    "executable": keys.FFMPEG_PATH,
-    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
-    "options": "-vn",
-}
-
-TEST_SONG = {
-    "title": "TEST SONG",
-    "webpage_url": "https://www.google.com",
-    "duration": 203,
-    "thumbnail": "https://cdn.discordapp.com/attachments/944306171345535057/946476229597495366/goosebumps.png"
-}
+from .player import MusicPlayer
+from .song import Song
 
 
-class MusicPlayer(discord.Cog):
+class Music(discord.Cog):
     """Handles simple commands and listeners."""
 
     def __init__(self, bot):
         self.bot = bot
+        self.players = {}
+
+    def get_player(self, guild):
+        """Return active song queue or make a new one."""
+
+        try:
+            return self.players[guild.id]
+        except KeyError:
+            player = MusicPlayer(guild)
+            self.players[guild.id] = player
+            return player
 
     @staticmethod
-    def fetch_song(query: str) -> dict | None:
-        with YoutubeDL(YDL_OPTS) as ydl:
-            song_info = ydl.extract_info(f"ytsearch:{query}", download=False)
-            try:
-                data = song_info["entries"][0]
-            except KeyError:
-                return None  # Couldnt find song
-
-            required_data = ("url", "title", "duration",
-                             "thumbnail", "webpage_url")
-            return {k: data[k] for k in required_data}
-
-    @staticmethod
-    def generate_player(song: dict) -> discord.Embed:
-        player = discord.Embed(
-            title="NOW PLAYING",
-            description=f"[{song['title']}]({song['webpage_url']})\n{normalize_time(song['duration'])}",
-            color=discord.Color.blue()
-        )
-        player.set_thumbnail(url=song["thumbnail"])
-
-        player.add_field(
-            name="UP NEXT",
-            value=f"{song['title']}\nETA: 1:23:45"
-        )
-
-        return player
-
-    @slash_command(name="connect", guild_ids=devguilds)
-    async def connect_to_voice(self, ctx):
+    async def connect_to_voice(ctx):
         """Connect to your voice channel"""
         # user is not in voice channel
         if not ctx.author.voice:
-            return await ctx.respond(TENOR.KERMIT_LOST)
+            raise CommandError("You aren't in a voice channel")
 
         # user is in different voice channel
         if ctx.voice_client is not None:
             await ctx.voice_client.move_to(ctx.author.voice.channel)
         else:
             await ctx.author.voice.channel.connect()
-
-        return await ctx.respond(EMOJI.CHECK)
 
     @slash_command(name="disconnect", guilds_ids=devguilds)
     async def disconnect_from_voice(self, ctx):
@@ -96,22 +53,43 @@ class MusicPlayer(discord.Cog):
         await ctx.respond(EMOJI.CHECK)
 
     @slash_command(name="play", guild_ids=devguilds)
-    async def play(self, ctx, songquery: str):
+    async def play(self, ctx, song: str):
         """Command to start the music player."""
 
-        song = self.fetch_song(songquery)
-        audio = discord.FFmpegPCMAudio(song["url"], **FFMPEG_OPTS)
+        # Need to defer response since it takes time
+        await ctx.interaction.response.defer()
 
-        ctx.voice_client.play(audio)
+        await self.connect_to_voice(ctx)
 
-        await ctx.respond(f"Playing {song['title']}")
+        song = Song.from_query(song)
+
+        mp = self.get_player(ctx.guild)
+        mp.enqueue(song)
+
+        mp.play_next()
+        await ctx.respond(embed=mp.embed, view=mp.controller)
+
+    # @tasks.loop(seconds=3.0)
+    # async def queue_timer(self):
+    #     """Checks the voice clients to see if one has stopped."""
+    #     for client in self.bot.voice_clients:
+    #         if client.is_playing():
+    #             continue
+    #         if (queue := SongQueue.get_queue(client.guild.id)):
+    #             if queue.paused:
+    #                 return
+    #             elif queue.loop:
+    #                 await self.play_song(client, queue.current_song)
+    #             else:
+    #                 # add song back onto queue if cycle is enabled
+    #                 if queue.cycle:
+    #                     queue.appendleft(queue.current_song)
+
+    #                 await self.play_song(client, queue.pop())
 
     @slash_command(name="test", guild_ids=devguilds)
     async def test(self, ctx):
-        player = self.generate_player(TEST_SONG)
-
-        view = create_view()
-        await ctx.respond(embed=player, view=view)
+        pass
 
 
 def setup(bot):
@@ -119,11 +97,4 @@ def setup(bot):
     if not os.path.isfile(keys.FFMPEG_PATH):
         raise FileNotFoundError("Couldn't locate FFMPEG executable")
 
-    bot.add_cog(MusicPlayer(bot))
-
-
-def normalize_time(seconds: int):
-    """Turns seconds into H:M:S"""
-    if seconds < 3600:
-        return time.strftime("%M:%S", time.gmtime(seconds))
-    return time.strftime("%H:%M:%S", time.gmtime(seconds))
+    bot.add_cog(Music(bot))
