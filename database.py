@@ -126,3 +126,30 @@ class Attribute(object):
             self.values.isert(0, "ID")
         else:
             self.values.insert(0, self.ID)
+
+"""
+Test queries for the database. Use these as examples for your your own queries.
+
+test_db = HallBotDB("Test")
+test_db.create_table("Players", ["Name", "RPS Score"])
+test_db.get_table("Players").add_attribute(Attribute(["test_name1", 2], False))
+test_db.get_table("Players").add_attribute(Attribute(["test_name2", 5], False))
+for table in test_db.database:
+    print(table.name)
+    for attribute in table.attributes:
+        print(attribute.values)
+test_db.dumpdb()
+copy_test_db = HallBotDB("Test")
+for table in copy_test_db.database:
+    print(table.name)
+    for attribute in table.attributes:
+        print(attribute.values)
+copy_test_db.get_table("Players").add_attribute(Attribute(["test_name3", 3], False))
+copy_test_db.create_table("Servers", ["Server"])
+copy_test_db.get_table("Servers").add_attribute(Attribute(["server_name"], False))
+for table in copy_test_db.database:
+    print(table.name)
+    for attribute in table.attributes:
+        print(attribute.values)
+copy_test_db.dumpdb()
+"""
