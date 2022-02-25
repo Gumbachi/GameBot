@@ -12,3 +12,8 @@ bot = discord.Bot(
 
 # The ids of the dev testing servers
 devguilds = [944304184335945759]
+
+class EMOJI:
+    ROCK = "\U0001faa8"
+    PAPER = "\U0001f4c3"
+    SCISSORS = "\u2702"
