@@ -12,3 +12,8 @@ bot = discord.Bot(
 
 # The ids of the dev testing servers
 devguilds = [944304184335945759]
+
+
+class Emoji:
+    CHECKMARK = "✅"
+    CROSS = "❌"
