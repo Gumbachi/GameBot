@@ -26,3 +26,5 @@ class EMOJI:
     SKIP = "⏩"
     REPEAT = "🔁"
     REPEATONE = "🔂"
+    CHECKMARK = "✅"
+    CROSS = "❌"
