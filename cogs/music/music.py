@@ -4,7 +4,7 @@ import discord
 import keys
 import asyncio
 
-from common.cfg import EMOJI, TENOR, devguilds
+from common.cfg import Emoji, Tenor, devguilds
 from discord.commands import slash_command
 from discord.ext import tasks
 from discord.ext.commands import CommandError
@@ -48,11 +48,11 @@ class Music(discord.Cog):
     async def disconnect_from_voice(self, ctx):
         """Disconnect bot from your voice channel"""
         if not ctx.voice_client:
-            return await ctx.respond(EMOJI.WEIRDCHAMP)
+            return await ctx.respond(Emoji.WEIRDCHAMP)
 
         await ctx.voice_client.disconnect()
         del self.players[ctx.guild.id]
-        await ctx.respond(EMOJI.CHECK)
+        await ctx.respond(Emoji.CHECK)
 
     @slash_command(name="play", guild_ids=devguilds)
     async def play(self, ctx, song: str):
@@ -64,7 +64,7 @@ class Music(discord.Cog):
         try:
             await self.connect_to_voice(ctx)
         except CommandError:
-            return await ctx.respond(TENOR.KERMIT_LOST)
+            return await ctx.respond(Tenor.KERMIT_LOST)
 
         song = Song.from_query(song)
         mp = self.get_player(ctx.guild)

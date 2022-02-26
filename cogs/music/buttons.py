@@ -3,7 +3,7 @@
 from enum import Enum
 import discord
 from discord.enums import ButtonStyle
-from common.cfg import EMOJI
+from common.cfg import Emoji
 from discord.ui import Button
 
 
@@ -15,7 +15,7 @@ class RepeatType(Enum):
 
 class PlayButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.PLAY, style=ButtonStyle.green)
+        super().__init__(emoji=Emoji.PLAY, style=ButtonStyle.green)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
@@ -25,7 +25,7 @@ class PlayButton(Button):
 
 class PauseButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.PAUSE, style=ButtonStyle.red)
+        super().__init__(emoji=Emoji.PAUSE, style=ButtonStyle.red)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
@@ -35,7 +35,7 @@ class PauseButton(Button):
 
 class SkipButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.SKIP, style=ButtonStyle.gray)
+        super().__init__(emoji=Emoji.SKIP, style=ButtonStyle.gray)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
@@ -45,7 +45,7 @@ class SkipButton(Button):
 
 class RepeatOffButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.REPEAT, style=ButtonStyle.gray)
+        super().__init__(emoji=Emoji.REPEAT, style=ButtonStyle.gray)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
@@ -55,7 +55,7 @@ class RepeatOffButton(Button):
 
 class RepeatButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.REPEAT, style=ButtonStyle.green)
+        super().__init__(emoji=Emoji.REPEAT, style=ButtonStyle.green)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
@@ -65,7 +65,7 @@ class RepeatButton(Button):
 
 class RepeatOneButton(Button):
     def __init__(self, player):
-        super().__init__(emoji=EMOJI.REPEATONE, style=ButtonStyle.green)
+        super().__init__(emoji=Emoji.REPEATONE, style=ButtonStyle.green)
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):

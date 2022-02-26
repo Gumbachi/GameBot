@@ -14,11 +14,11 @@ bot = discord.Bot(
 devguilds = [944304184335945759]
 
 
-class TENOR:
+class Tenor:
     KERMIT_LOST = "https://tenor.com/view/kermit-the-frog-looking-for-directions-navigate-is-lost-gif-11835765"
 
 
-class EMOJI:
+class Emoji:
     WEIRDCHAMP = "<:weirdchamp:945806052794957924>"
     CHECK = "<:check:945808383632609341>"
     PLAY = "▶️"
