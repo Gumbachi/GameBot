@@ -70,8 +70,11 @@ class Music(discord.Cog):
         mp = self.get_player(ctx.guild)
         mp.enqueue(song)
 
+        # Add to queue if there is already something playing
         if ctx.voice_client.is_playing() or ctx.voice_client.is_paused():
-            return await ctx.respond("Added to queue")
+            emb = discord.Embed(title="Added to queue", description=song.title)
+            emb.set_thumbnail(url=song.thumbnail)
+            return await ctx.respond(embed=emb)
 
         await mp.play_next()
         await ctx.respond(embed=mp.embed, view=mp.controller)
