@@ -22,7 +22,6 @@ class MusicPlayer():
         self.repeat_type: RepeatType = RepeatType.REPEATOFF
         self.paused = False
         self.current: Song = None
-        self.next = None
         self.songlist: list[Song] = []
 
     @property
@@ -37,7 +36,10 @@ class MusicPlayer():
     def embed(self) -> discord.Embed:
 
         if not self.current:
-            return discord.Embed(title="No Songs Playing")
+            return discord.Embed(
+                title="No Songs Playing",
+                description="`/play` is the solution"
+            )
 
         embed = discord.Embed(
             title="NOW PLAYING",
@@ -45,10 +47,6 @@ class MusicPlayer():
             color=discord.Color.blue()
         )
         embed.set_thumbnail(url=self.current.thumbnail)
-
-        if self.next:
-            embed.add_field(name="UP NEXT", value=f"{self.next.title}")
-
         return embed
 
     @property
