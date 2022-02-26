@@ -39,7 +39,8 @@ class SkipButton(Button):
         self.player = player
 
     async def callback(self, interaction: discord.Interaction):
-        self.player.skip()
+        await self.player.skip()
+        await interaction.response.edit_message(embed=self.player.embed)
 
 
 class RepeatOffButton(Button):

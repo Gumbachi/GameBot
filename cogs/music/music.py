@@ -56,7 +56,7 @@ class Music(discord.Cog):
 
     @slash_command(name="play", guild_ids=devguilds)
     async def play(self, ctx, song: str):
-        """Command to start the music player."""
+        """Command to start the music player"""
 
         # Need to defer response since it takes time
         await ctx.interaction.response.defer()
@@ -70,8 +70,25 @@ class Music(discord.Cog):
         mp = self.get_player(ctx.guild)
         mp.enqueue(song)
 
+        if ctx.voice_client.is_playing() or ctx.voice_client.is_paused():
+            return await ctx.respond("Added to queue")
+
         await mp.play_next()
         await ctx.respond(embed=mp.embed, view=mp.controller)
+
+    @slash_command(name="player", guild_ids=devguilds)
+    async def send_player(self, ctx):
+        """Get the music player and its buttons."""
+
+        mp = self.get_player(ctx.guild)
+        await ctx.respond(embed=mp.embed, view=mp.controller)
+
+    @slash_command(name="queue", guild_ids=devguilds)
+    async def display_queue(self, ctx):
+        """Display the song queue"""
+
+        mp = self.get_player(ctx.guild)
+        await ctx.respond(embed=mp.queue)
 
     @tasks.loop(seconds=5)
     async def player_loop(self):

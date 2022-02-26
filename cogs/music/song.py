@@ -1,5 +1,6 @@
 from yt_dlp import YoutubeDL
 from discord.ext.commands import UserInputError
+import time
 
 YDL_OPTS = {
     "format": "bestaudio/best",
@@ -21,10 +22,16 @@ class Song():
 
     def __init__(self, **songdata) -> None:
         self.title = songdata['title']
-        self.duration = songdata['duration']
+        self._duration = songdata['duration']
         self.url = songdata['url']
         self.webpage_url = songdata['webpage_url']
         self.thumbnail = songdata['thumbnail']
+
+    @property
+    def duration(self) -> str:
+        if self._duration < 3600:
+            return time.strftime("%M:%S", time.gmtime(self._duration))
+        return time.strftime("%H:%M:%S", time.gmtime(self._duration))
 
     @classmethod
     def from_query(cls, query: str):

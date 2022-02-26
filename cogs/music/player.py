@@ -1,10 +1,10 @@
 """Holds the queue class for the music player."""
 import discord
-from cogs.music.song import Song
-from common.utils import normalize_time
-from .buttons import *
-from discord.ui import View
 import keys
+from cogs.music.song import Song
+from discord.ui import View
+
+from .buttons import *
 
 FFMPEG_OPTS = {
     "executable": keys.FFMPEG_PATH,
@@ -19,11 +19,11 @@ class MusicPlayer():
     def __init__(self, guild):
         self.guild = guild
 
-        self.repeat_type = RepeatType.REPEATOFF
+        self.repeat_type: RepeatType = RepeatType.REPEATOFF
         self.paused = False
-        self.current = None
+        self.current: Song = None
         self.next = None
-        self.songlist = []
+        self.songlist: list[Song] = []
 
     @property
     def playing(self):
@@ -41,7 +41,7 @@ class MusicPlayer():
 
         embed = discord.Embed(
             title="NOW PLAYING",
-            description=f"[{self.current.title}]({self.current.webpage_url})\n{normalize_time(self.current.duration)}",
+            description=f"[{self.current.title}]({self.current.webpage_url})\n{self.current.duration}",
             color=discord.Color.blue()
         )
         embed.set_thumbnail(url=self.current.thumbnail)
@@ -49,6 +49,23 @@ class MusicPlayer():
         if self.next:
             embed.add_field(name="UP NEXT", value=f"{self.next.title}")
 
+        return embed
+
+    @property
+    def queue(self) -> discord.Embed:
+        embed = discord.Embed(
+            title="QUEUEUEUEUEUE",
+            description=f"**NOW PLAYING**\n[{self.current.title}]({self.current.webpage_url})"
+        )
+        embed.set_thumbnail(url=self.current.thumbnail)
+        embed.set_footer(text="Only showing 5 songs. Other songs are hidden")
+
+        for i, song in enumerate(self.songlist[:5], 1):
+            embed.add_field(
+                name=f"{i}. {song.title}",
+                value=f"🕒 {song.duration} - [Link]({song.webpage_url})",
+                inline=False
+            )
         return embed
 
     @property
@@ -69,25 +86,19 @@ class MusicPlayer():
         self.songlist.append(song)
 
     async def play_next(self):
+        """Will begin the next song based on the repeat configuration."""
 
-        print(f"PLAYING NEXT: {self.repeat_type} {self.songlist}")
-
-        if self.empty and self.current is None:
-            await self.guild.voice_client.disconnect()
-            return
-
-        # Repeat one should loop current song
-        if self.repeat_type == RepeatType.REPEATONE:
-            # do nothing because current will be played again
-            pass
+        # only disconnect if not repeatone because repeat one doesnt need to pop queue
+        if self.empty and self.repeat_type != RepeatType.REPEATONE:
+            return await self.guild.voice_client.disconnect()
 
         # Repeat should loop the entire list
-        elif self.repeat_type == RepeatType.REPEAT:
-            self.current = self.songlist.pop(0)
+        if self.repeat_type == RepeatType.REPEAT:
             self.songlist.append(self.current)
+            self.current = self.songlist.pop(0)
 
         # Repeat off should just burn through the songs
-        else:
+        elif self.repeat_type == RepeatType.REPEATOFF:
             self.current = self.songlist.pop(0)
 
         print(f"PLAYING: {self.current.title}")
