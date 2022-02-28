@@ -1,56 +1,48 @@
-import random
-from types import NoneType
+# import random
+# import discord
+# from .button import create_view
+# # from discord import Button
 
-class Parser:
-    def __init__(self, choice):
-        choice = choice.lower()
+# from rps.model import RPS
+# from rps.parser import Parser
+# from rps.controller import RPSGame
 
-        if choice == RPS.ROCK:
-            self.choice = RPS.ROCK
-        elif choice == RPS.PAPER:
-            self.choice = RPS.PAPER
-        elif choice == RPS.SCISSORS:
-            self.choice = RPS.SCISSORS
-        else:
-            raise
+# from types import NoneType
+# from common.cfg import devguilds
+# from discord.commands import slash_command
 
+# class Rockpaperscissors(discord.Cog):
+#     """Handles simple commands and listeners."""
 
-class RPSGame:
-    def run(self, user_choice):
-        rps_instance = RPS()
+#     def __init__(self, bot):
+#         self.bot = bot
 
-        if user_choice not in rps_instance.get_choices():
-            raise Exception("Invalid Choice: %s is not a valid choice" % user_choice)
+#     @slash_command(name="rps", guild_ids=devguilds)
+#     async def rps(self, ctx, user_choice: Parser = Parser(RPS.ROCK)):
+#         """Commmand to call rock paper scissors."""
+#         if ctx.author.bot:
+#             return
 
-        bot_choice = random.choice(rps_instance.get_choices())
+#         game_instance = RPSGame()
 
-        winner = rps_instance.check_win(user_choice, bot_choice)
+#         user_choice = user_choice.choice
 
-        return winner, bot_choice
+#         winner, bot_choice = game_instance.run("asd")
 
-class RPS:
-    ROCK = "rock"
-    PAPER = "paper"
-    SCISSORS = "scissors"
+#         if winner is None:
+#             message = "It's a draw! Both chose: %s" % user_choice
+#         elif winner is True:
+#             message = "You win: %s vs %s" % (user_choice, bot_choice)
+#         elif winner is False:
+#             message = "You lose: %s vs %s" % (user_choice, bot_choice)
 
-    def get_choices(self):
-        return(self.ROCK, self.PAPER, self.SCISSORS)
-    
-    def check_win(self, choice1, choice2):
-        winner_check = {
-            (RPS.ROCK, RPS.PAPER): False,
-            (RPS.ROCK, RPS.SCISSORS): True,
-            (RPS.PAPER, RPS.ROCK): True,
-            (RPS.PAPER, RPS.SCISSORS): False,
-            (RPS.SCISSORS, RPS.ROCK): False,
-            (RPS.SCISSORS, RPS.PAPER): True,
-        }
+#         await ctx.send(message)
 
-        winner = None
-        if choice1 == choice2:
-            winner = None
-        else:
-            winner = winner_check[(choice1, choice2)]
+#         # view = discord.ui.View(RockButton(), PaperButton(), ScissorButton(), timeout=60)
 
-        return winner
+#         # view = create_view()
+#         # await ctx.respond(embed=game_instance, view=view)
 
+# def setup(bot):
+#     """Entry point for loading cogs. Required for all cogs"""
+#     bot.add_cog(Rockpaperscissors(bot))

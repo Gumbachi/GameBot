@@ -9,6 +9,10 @@ async def on_ready():
     """Bot is now ready to rumble."""
     print("Ready to go")
 
+ignored = [
+    "cogs.rps.button"
+]
+
 # load extensions from the cogs dir
 if __name__ == '__main__':
 
