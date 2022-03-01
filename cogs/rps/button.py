@@ -1,36 +1,70 @@
-# import discord
-# from discord.enums import ButtonStyle
-# # from cogs.rps.rps import RPS
-# from common.cfg import EMOJI
-# from discord.ui import View 
-# from discord.ui import Button
+import discord
+from discord.enums import ButtonStyle
+from .controller import RPSGame
+from common.cfg import EMOJI
+from discord.ui import View 
+from discord.ui import Button
 
-# class RockButton(Button):
-#     def __init__(self):
-#         """Play Rock"""
-#         super().__init__(emoji=EMOJI.ROCK, style=ButtonStyle.gray)
+class RockButton(discord.ui.Button):
+    def __init__(self, playerchoice):
+        """Play Rock"""
+        super().__init__(emoji=EMOJI.ROCK, style=ButtonStyle.gray)
+        self.playerchoice = playerchoice
 
-#     async def callback(self, interaction: discord.Interaction):
-#         await interaction.response.send_message("You Picked Rock")
+    async def callback(self, interaction: discord.Interaction):
+        if interaction.user not in self.playerchoice.rock:
+            self.playerchoice.rock.add(interaction.user)
+            game_instance = RPSGame()
+            user_choice = "rock"
+            winner, bot_choice = game_instance.run(user_choice)
 
-# class PaperButton(Button):
-#     def __init__(self):
-#         """Play Paper"""
-#         super().__init__(emoji=EMOJI.PAPER, style=ButtonStyle.gray)
+            if winner is None:
+                message = "It's a draw! Both chose: %s" % user_choice
+            elif winner is True:
+                message = "You win: %s vs %s" % (user_choice, bot_choice)
+            elif winner is False:
+                message = "You lose: %s vs %s" % (user_choice, bot_choice)
+            await interaction.response.send_message(message)
 
-#     async def callback(self, interaction: discord.Interaction):
-#         await interaction.response.send_message("You Picked Paper")
 
-# class ScissorButton(Button):
-#     def __init__(self):
-#         """Play Scissors"""
-#         super().__init__(emoji=EMOJI.SCISSORS, style=ButtonStyle.gray)
+class PaperButton(discord.ui.Button):
+    def __init__(self, playerchoice):
+        """Play Paper"""
+        super().__init__(emoji=EMOJI.PAPER, style=ButtonStyle.gray)
+        self.playerchoice = playerchoice
 
-#     async def callback(self, interaction: discord.Interaction):
-#         await interaction.response.send_message("You Picked Scissors")
+    async def callback(self, interaction: discord.Interaction):
+        if interaction.user not in self.playerchoice.paper:
+            self.playerchoice.paper.add(interaction.user)
+            game_instance = RPSGame()
+            user_choice = "paper"
+            winner, bot_choice = game_instance.run(user_choice)
 
-# def create_view(view: discord.ui.View = None):
-#     """Creates the rps game view"""
+            if winner is None:
+                message = "It's a draw! Both chose: %s" % user_choice
+            elif winner is True:
+                message = "You win: %s vs %s" % (user_choice, bot_choice)
+            elif winner is False:
+                message = "You lose: %s vs %s" % (user_choice, bot_choice)
+            await interaction.response.send_message(message)
 
-#     if not view:
-#         return View(RockButton(), PaperButton(), ScissorButton(), timeout=60)
+class ScissorButton(discord.ui.Button):
+    def __init__(self, playerchoice):
+        """Play Scissors"""
+        super().__init__(emoji=EMOJI.SCISSORS, style=ButtonStyle.gray)
+        self.playerchoice = playerchoice
+
+    async def callback(self, interaction: discord.Interaction):
+        if interaction.user not in self.playerchoice.scissors:
+            self.playerchoice.scissors.add(interaction.user)
+            game_instance = RPSGame()
+            user_choice = "scissors"
+            winner, bot_choice = game_instance.run(user_choice)
+
+            if winner is None:
+                message = "It's a draw! Both chose: %s" % user_choice
+            elif winner is True:
+                message = "You win: %s vs %s" % (user_choice, bot_choice)
+            elif winner is False:
+                message = "You lose: %s vs %s" % (user_choice, bot_choice)
+            await interaction.response.send_message(message)
