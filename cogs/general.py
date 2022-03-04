@@ -1,4 +1,6 @@
 import discord
+import random
+import asyncio
 from common.cfg import devguilds
 from discord.commands import slash_command
 
@@ -24,6 +26,9 @@ class GeneralCommands(discord.Cog):
 
         if message.content.lower() == "brian":
             await message.reply("hall")
+        if message.content.lower() == "hall":
+            await message.reply("brian")
+
 
     @discord.Cog.listener()
     async def on_guild_join(self, guild):

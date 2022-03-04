@@ -1,14 +1,14 @@
 import os
 
 import discord
-import keys
-import asyncio
-
-from common.cfg import Emoji, Tenor, devguilds
+from discord import ApplicationContext as Context
+from discord.commands import Option
 from discord.commands import slash_command
 from discord.ext import tasks
 from discord.ext.commands import CommandError
 
+import keys
+from common.cfg import Emoji, Tenor, devguilds
 from .player import MusicPlayer
 from .song import Song
 
@@ -21,7 +21,7 @@ class Music(discord.Cog):
         self.players = {}
         self.player_loop.start()
 
-    def get_player(self, guild):
+    def get_player(self, guild: discord.Guild) -> MusicPlayer:
         """Return active player or make a new one."""
 
         try:
@@ -44,7 +44,7 @@ class Music(discord.Cog):
         else:
             await ctx.author.voice.channel.connect()
 
-    @slash_command(name="disconnect", guilds_ids=devguilds)
+    @slash_command(name="disconnect", guild_ids=devguilds)
     async def disconnect_from_voice(self, ctx):
         """Disconnect bot from your voice channel"""
         if not ctx.voice_client:
@@ -55,7 +55,7 @@ class Music(discord.Cog):
         await ctx.respond(Emoji.CHECK)
 
     @slash_command(name="play", guild_ids=devguilds)
-    async def play(self, ctx, song: str):
+    async def play(self, ctx: Context, song: Option(str, "Search for a song on youtube")):
         """Command to start the music player"""
 
         # Need to defer response since it takes time
@@ -77,21 +77,17 @@ class Music(discord.Cog):
             return await ctx.respond(embed=emb)
 
         await mp.play_next()
-        await ctx.respond(embed=mp.embed, view=mp.controller)
+        message = await ctx.send(embed=mp.embed, view=mp.controller)
+        mp.message = message
+        await ctx.respond(message.jump_url)
 
     @slash_command(name="player", guild_ids=devguilds)
-    async def send_player(self, ctx):
+    async def send_player(self, ctx: Context):
         """Get the music player and its buttons."""
 
         mp = self.get_player(ctx.guild)
-        await ctx.respond(embed=mp.embed, view=mp.controller)
-
-    @slash_command(name="queue", guild_ids=devguilds)
-    async def display_queue(self, ctx):
-        """Display the song queue"""
-
-        mp = self.get_player(ctx.guild)
-        await ctx.respond(embed=mp.queue)
+        mp.message = await ctx.send(embed=mp.embed, view=mp.controller)
+        await ctx.respond(mp.message.jump_url)
 
     @tasks.loop(seconds=5)
     async def player_loop(self):
@@ -112,7 +108,7 @@ class Music(discord.Cog):
 
 def setup(bot):
     """Entry point for loading cogs. Required for all cogs"""
-    if not os.path.isfile(keys.FFMPEG_PATH):
+    if keys.FFMPEG_PATH != "ffmpeg" and not os.path.isfile(keys.FFMPEG_PATH):
         raise FileNotFoundError("Couldn't locate FFMPEG executable")
 
     bot.add_cog(Music(bot))
