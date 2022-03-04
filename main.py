@@ -14,6 +14,7 @@ ignored = [
     "cogs.rps.controller"
     "cogs.rps.model"
     "cogs.rps.rockpaperscissors"
+    "cogs.rpspvp.game"
 ]
 
 # load extensions from the cogs dir
@@ -24,6 +25,10 @@ if __name__ == '__main__':
             # parse string to correct format
             ext = str(ext).replace("/", ".").replace("\\", ".")
             ext = ext[:-3]  # trim .py extension
+
+            if ext in ignored:
+                continue
+
             bot.load_extension(ext)
             print(f"LOADED: {ext}")
 
