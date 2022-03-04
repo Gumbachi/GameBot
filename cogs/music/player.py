@@ -93,7 +93,7 @@ class MusicPlayer():
         if self.songlist:
             embed.add_field(
                 name="UP NEXT",
-                value="\n\n".join(
+                value="\n" + "\n\n".join(
                     [f"**{i}** {str(song)}" for i, song in enumerate(self.songlist, 1)])
             )
 
@@ -108,6 +108,8 @@ class MusicPlayer():
 
         # only disconnect if not repeatone because repeat one doesnt need to pop queue
         if self.empty and self.repeat_type == RepeatType.REPEATOFF:
+            self.current = None
+            await self.update()
             return await self.guild.voice_client.disconnect()
 
         # Repeat should loop the entire list
