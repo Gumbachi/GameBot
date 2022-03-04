@@ -1,9 +1,6 @@
 import discord
 from common.cfg import devguilds
 from discord.commands import slash_command
-from discord import ButtonStyle, Embed
-from common.cfg import Emoji
-from typing import List
 from .game import Game
 
 
@@ -13,6 +10,7 @@ class TicTacToe(discord.Cog):
     O = -1
     X = 1
     draw = 2
+
     def __init__(self, bot):
         self.bot = bot
         self.current_player = self.X
@@ -22,16 +20,15 @@ class TicTacToe(discord.Cog):
             [0, 0, 0],
         ]
 
-        #for i in range(3):
-            #for j in range(3):
-                #self.add_item(TicTacToeButton)
+        # for i in range(3):
+        # for j in range(3):
+        # self.add_item(TicTacToeButton)
 
     @slash_command(name="tictactoe", guild_ids=devguilds)
     async def startGame(self, ctx, opponent: discord.Member):
         game = Game(ctx.author, opponent)
         self.instances[ctx.guild.id] = game
         await ctx.respond(f"{ctx.author} vs {opponent}", view=game.view)
-
 
     # def winStatus(self):
     #     # horizontal win

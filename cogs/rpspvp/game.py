@@ -1,7 +1,8 @@
 import discord
 import random
 from discord import ButtonStyle, Embed
-from common.cfg import EMOJI, bot
+from common.cfg import Emoji, bot
+
 
 class PVPGame():
 
@@ -9,16 +10,17 @@ class PVPGame():
         self.p1 = p1
         self.p2 = p2
         self.p1choice = None
-        self.p2choice = None if not p2 == bot.user else random.choice(["Rock", "Paper", "Scissors"])
-        self.buttons = [RockButton(self), PaperButton(self), ScissorButton(self)]
-        
+        self.p2choice = None if not p2 == bot.user else random.choice(
+            ["Rock", "Paper", "Scissors"])
+        self.buttons = [RockButton(self), PaperButton(
+            self), ScissorButton(self)]
 
     @property
     def embed(self):
-         return discord.Embed(
+        return discord.Embed(
             title=self.status,
             color=discord.Color.blue()
-         )
+        )
 
     @property
     def controller(self):
@@ -34,18 +36,16 @@ class PVPGame():
             ("Scissors", "Rock"): self.p2,
             ("Scissors", "Paper"): self.p1,
         }.get((self.p1choice, self.p2choice))
-        
-    @property
-    def status(self): 
 
-        print(self.p1choice, self.p2choice)
+    @property
+    def status(self):
+
         if not self.p1choice and not self.p2choice:
             return f"{self.p1.name} vs {self.p2.name}"
-        
+
         if self.p1choice == self.p2choice:
             self.end()
             return f"Its a tie you both chose {self.p1choice}"
-
 
         if not self.winner:
             return f"{self.p1.name} vs {self.p2.name}"
@@ -54,17 +54,18 @@ class PVPGame():
 
         if self.winner == self.p1:
             return f"{self.p1choice} beats {self.p2choice} - {self.p1.name} Wins!"
-            
+
         return f"{self.p2choice} beats {self.p1choice} - {self.p2.name} Wins!"
 
     def end(self):
         for button in self.buttons:
             button.disabled = True
 
+
 class RockButton(discord.ui.Button):
     def __init__(self, game):
         """Play Rock"""
-        super().__init__(emoji=EMOJI.ROCK, style=ButtonStyle.gray)
+        super().__init__(emoji=Emoji.ROCK, style=ButtonStyle.gray)
         self.game = game
 
     async def callback(self, interaction: discord.Interaction):
@@ -81,7 +82,7 @@ class RockButton(discord.ui.Button):
 class PaperButton(discord.ui.Button):
     def __init__(self, game):
         """Play Paper"""
-        super().__init__(emoji=EMOJI.PAPER, style=ButtonStyle.gray)
+        super().__init__(emoji=Emoji.PAPER, style=ButtonStyle.gray)
         self.game = game
 
     async def callback(self, interaction: discord.Interaction):
@@ -99,7 +100,7 @@ class PaperButton(discord.ui.Button):
 class ScissorButton(discord.ui.Button):
     def __init__(self, game):
         """Play Scissors"""
-        super().__init__(emoji=EMOJI.SCISSORS, style=ButtonStyle.gray)
+        super().__init__(emoji=Emoji.SCISSORS, style=ButtonStyle.gray)
         self.game = game
 
     async def callback(self, interaction: discord.Interaction):
