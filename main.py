@@ -13,7 +13,8 @@ async def on_ready():
 ignored = [
     "cogs.music.buttons",
     "cogs.music.player",
-    "cogs.music.song"
+    "cogs.music.song",
+    "cogs.tictactoe.game"
 ]
 
 if __name__ == '__main__':
