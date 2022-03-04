@@ -16,7 +16,8 @@ ignored = [
     "cogs.music.buttons",
     "cogs.music.player",
     "cogs.music.song",
-  "cogs.rpspvp.game"
+    "cogs.tictactoe.game",
+    "cogs.rpspvp.game",
 ]
 
 if __name__ == '__main__':
