@@ -28,3 +28,5 @@ class Emoji:
     REPEATONE = "🔂"
     CHECKMARK = "✅"
     CROSS = "❌"
+    TAILS = "<:tails:946485039925956648>"
+    HEADS = "<:heads:946485030329401414>"
