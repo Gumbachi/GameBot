@@ -4,12 +4,10 @@ from discord.commands import slash_command
 from discord import ButtonStyle, Embed
 from common.cfg import Emoji
 from typing import List
-import game
+from .game import Game
 
 
 class TicTacToe(discord.Cog):
-    # players
-    # board = [[]]
     instances = {}
 
     O = -1
@@ -32,7 +30,7 @@ class TicTacToe(discord.Cog):
     async def startGame(self, ctx, opponent: discord.Member):
         game = Game(ctx.author, opponent)
         self.instances[ctx.guild.id] = game
-        ctx.respond(f"{ctx.author} vs {opponent}", view=game.view)
+        await ctx.respond(f"{ctx.author} vs {opponent}", view=game.view)
 
 
     # def winStatus(self):
