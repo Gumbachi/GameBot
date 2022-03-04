@@ -37,6 +37,7 @@ class Rockpaperscissors(discord.Cog):
     @slash_command(name="rps", guild_ids=devguilds)
     async def rps(self, ctx):
         """Command to check if bot is alive or if you need a friend."""
+        # Want to add optional to choose between playing computer or playing against each other
         choice = RPSClass()
         message = await ctx.respond(embed=choice.embed, view=choice.controller)
         self.playerchoice[message.id] = choice

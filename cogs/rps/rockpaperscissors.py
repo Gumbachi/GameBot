@@ -1,3 +1,5 @@
+# THIS FILE's PURPOSE IS A ONE FILE WORKING VERSION OF RPS
+# 
 # import discord
 # import random as rand
 # from common.cfg import devguilds

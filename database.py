@@ -4,7 +4,7 @@ import string
 
 ID_Length = 16
 # Make sure that the path is correct for your computer.
-parent_path = "C:\\Users\\Ryguy\\OneDrive\\Documents\\GitHub\\Hallbot"
+parent_path = "C:\\Users\\Ryguy\\Documents\\GitHub\\HallBot\\"
 
 
 # Database Object
@@ -19,7 +19,7 @@ class HallBotDB(object):
         self.name = name
         self.path = os.path.join(parent_path, name)
         if os.path.isdir(self.path):
-            self.loaddb()
+            self.__loaddb()
         else:
             os.mkdir(self.path)
             self.ID = str(''.join(random.choices(string.ascii_letters + string.digits, k=ID_Length)))  # https://www.javatpoint.com/python-program-to-generate-a-random-string
@@ -124,7 +124,7 @@ class Attribute(object):
         self.values = values
         self.ID = str(''.join(random.choices(string.ascii_letters + string.digits, k=ID_Length)))
         if header:
-            self.values.isert(0, "ID")
+            self.values.insert(0, "ID")
         else:
             self.values.insert(0, self.ID)
 

@@ -6,6 +6,7 @@ from discord.ui import View
 from discord.ui import Button
 from database import HallBotDB, Attribute
 
+# Initializes the Database & creates a table
 test_db = HallBotDB("Test")
 test_db.create_table("Players", ["Name", "RPS Wins"])
 
@@ -26,8 +27,12 @@ class RockButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
-                # Adds 1 Win for every win
-                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
+                # Adds 1 Win into the database for every win
+                test_db.get_table("Players").add_attribute(Attribute([f"{interaction.user}", 1], False))
+                for table in test_db.database:
+                    print(f"Table: {table.name}")
+                    for attribute in table.attributes:
+                        print(f"Attribute: {attribute.values}")
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)
@@ -50,7 +55,11 @@ class PaperButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
-                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
+                test_db.get_table("Players").add_attribute(Attribute([f"{interaction.user}", 1], False))
+                for table in test_db.database:
+                    print(f"Table: {table.name}")
+                    for attribute in table.attributes:
+                        print(f"Attribute: {attribute.values}")
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)
@@ -72,7 +81,11 @@ class ScissorButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
-                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
+                test_db.get_table("Players").add_attribute(Attribute([f"{interaction.user}", 1], False))
+                for table in test_db.database:
+                    print(f"Table: {table.name}")
+                    for attribute in table.attributes:
+                        print(f"Attribute: {attribute.values}")
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)

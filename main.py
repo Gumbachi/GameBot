@@ -11,6 +11,9 @@ async def on_ready():
 
 ignored = [
     "cogs.rps.button"
+    "cogs.rps.controller"
+    "cogs.rps.model"
+    "cogs.rps.rockpaperscissors"
 ]
 
 # load extensions from the cogs dir
