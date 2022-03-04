@@ -48,7 +48,7 @@ test_db.create_table("Players", ["Name", "RPS Score"])
 
 ---------------------------------------------------------------
 
-### delete_table - Not functional yet
+### delete_table
 
 Deletes the named table from your database.
 
@@ -91,6 +91,18 @@ Will overwrite any files or folders with the same names.
 Code Example:
 ```python
 test_db.dumpdb()
+```
+
+---------------------------------------------------------------
+
+### \_\_str\_\_
+
+Function to print Databases nicely.
+
+Code Example:
+```python
+test_db = HallBotDB("Test")
+print(test_db)
 ```
 
 ---------------------------------------------------------------
@@ -159,7 +171,7 @@ test_db.get_table("Players").add_attribute(Attribute(["test_name1", 2], False))
 
 ---------------------------------------------------------------
 
-### remove_attribute - Not functional yet
+### remove_attribute
 
 Removes an attribute from the attributes list.
 
@@ -172,6 +184,18 @@ Parameters:
 Code Example:
 ```python
 test_table.remove_attribute("1234567890abcdef")
+```
+
+---------------------------------------------------------------
+
+### \_\_str\_\_
+
+Function to print Tables nicely.
+
+Code Example:
+```python
+test_table = Table("Players", ["Name", "RPS Score"])
+print(test_table)
 ```
 
 ---------------------------------------------------------------
@@ -211,4 +235,16 @@ Parameters:
 Code Example:
 ```python
 test_attribute = Attribute(["test_name1", 2], False)
+```
+
+---------------------------------------------------------------
+
+### \_\_str\_\_
+
+Function to print Attributes nicely.
+
+Code Example:
+```python
+test_attribute = Attribute(["test_name1", 2], False)
+print(test_attribute)
 ```
