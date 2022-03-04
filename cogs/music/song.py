@@ -27,6 +27,10 @@ class Song():
         self.webpage_url = songdata['webpage_url']
         self.thumbnail = songdata['thumbnail']
 
+    def __str__(self):
+        """Print for discord when converted to string."""
+        return f"[{self.title}]({self.webpage_url}) - {self.duration}"
+
     @property
     def duration(self) -> str:
         if self._duration < 3600:
