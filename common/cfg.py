@@ -13,7 +13,6 @@ bot = discord.Bot(
 # The ids of the dev testing servers
 devguilds = [944304184335945759]
 
-
 class Tenor:
     KERMIT_LOST = "https://tenor.com/view/kermit-the-frog-looking-for-directions-navigate-is-lost-gif-11835765"
 
@@ -30,3 +29,6 @@ class Emoji:
     CROSS = "❌"
     TAILS = "<:tails:946485039925956648>"
     HEADS = "<:heads:946485030329401414>"
+    ROCK = "\U0001faa8"
+    PAPER = "\U0001f4c3"
+    SCISSORS = "\u2702"

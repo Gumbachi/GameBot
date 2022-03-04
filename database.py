@@ -7,7 +7,6 @@ ID_Length = 16
 # Make sure that the path is correct for your computer.
 parent_path = "C:\\Users\\fluff\\PycharmProjects\\pythonProject9\\"
 
-
 # Database Object
 # Acts as a folder holding the tables within the database
 class HallBotDB(object):

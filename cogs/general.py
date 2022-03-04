@@ -1,4 +1,6 @@
 import discord
+import random
+import asyncio
 from common.cfg import devguilds
 from discord.commands import slash_command
 
