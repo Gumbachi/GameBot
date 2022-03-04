@@ -84,9 +84,9 @@ class RepeatOneButton(Button):
 
 class QueueButton(Button):
     def __init__(self, player, style: ButtonStyle = ButtonStyle.gray):
-        super().__init__(emoji=Emoji.QUEUE, style=style)
+        super().__init__(label="QUEUE", style=style)
         self.player = player
 
-    async def callback(self, interaction: discord.Interaction):
+    async def callback(self, _):
         self.player.queue_displayed = not self.player.queue_displayed
         await self.player.update()
