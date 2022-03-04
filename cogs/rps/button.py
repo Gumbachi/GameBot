@@ -4,6 +4,10 @@ from .controller import RPSGame
 from common.cfg import EMOJI
 from discord.ui import View 
 from discord.ui import Button
+from database import HallBotDB, Attribute
+
+test_db = HallBotDB("Test")
+test_db.create_table("Players", ["Name", "RPS Wins"])
 
 class RockButton(discord.ui.Button):
     def __init__(self, playerchoice):
@@ -22,6 +26,8 @@ class RockButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
+                # Adds 1 Win for every win
+                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)
@@ -44,6 +50,7 @@ class PaperButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
+                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)
@@ -65,6 +72,7 @@ class ScissorButton(discord.ui.Button):
                 message = "It's a draw! Both chose: %s" % user_choice
             elif winner is True:
                 message = "You win: %s vs %s" % (user_choice, bot_choice)
+                test_db.get_table("Players").add_attribute(Attribute([interaction.user, 1], False))
             elif winner is False:
                 message = "You lose: %s vs %s" % (user_choice, bot_choice)
             await interaction.response.send_message(message)
