@@ -2,7 +2,10 @@ import discord
 import random
 from discord import ButtonStyle, Embed
 from common.cfg import Emoji, bot
+from database import HallBotDB, Attribute
 
+rpswins = HallBotDB("Test")
+rpswins.create_table("Players", ["Name", "RPS Wins"])
 
 class PVPGame():
 
@@ -53,8 +56,10 @@ class PVPGame():
         self.end()
 
         if self.winner == self.p1:
+            rpswins.get_table("Players").add_attribute(Attribute([self.p1.name, 1], False))
             return f"{self.p1choice} beats {self.p2choice} - {self.p1.name} Wins!"
 
+        rpswins.get_table("Players").add_attribute(Attribute([self.p2.name, 1], False))
         return f"{self.p2choice} beats {self.p1choice} - {self.p2.name} Wins!"
 
     def end(self):
