@@ -35,3 +35,4 @@ class Emoji:
     WHITE_SQUARE = "⬜"
     GREEN_SQUARE = "🟩"
     YELLOW_SQUARE = "🟨"
+    POOLBALL = "🎱"
