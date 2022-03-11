@@ -10,15 +10,14 @@ async def on_ready():
     print("Ready to go")
 
 # load extensions from the cogs dir
-if __name__ == '__main__':
-    # .py files in cogs that are not cogs
-    ignored = [
-        "cogs.music.buttons",
-        "cogs.music.player",
-        "cogs.music.song",
-        "cogs.tictactoe.game",
-        "cogs.rpspvp.game",
-    ]
+# .py files in cogs that are not cogs
+ignored = [
+    "cogs.music.buttons",
+    "cogs.music.player",
+    "cogs.music.song",
+    "cogs.tictactoe.game",
+    "cogs.rpspvp.game",
+]
 
 if __name__ == '__main__':
     # find all .py files in ./cogs

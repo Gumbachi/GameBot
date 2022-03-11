@@ -1,9 +1,6 @@
 import discord
 from common.cfg import devguilds
 from discord.commands import slash_command
-from discord import ButtonStyle, Embed
-from common.cfg import Emoji
-from typing import List
 from .game import Game
 import database
 
@@ -29,7 +26,6 @@ class TicTacToe(discord.Cog):
         game = Game(ctx.author, opponent)
         self.instances[ctx.guild.id] = game
         await ctx.respond(f"{ctx.author} vs {opponent}", view=game.view)
-
 
 def setup(bot):
     bot.add_cog(TicTacToe(bot))

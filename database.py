@@ -5,10 +5,12 @@ import shutil
 
 ID_Length = 16
 # Make sure that the path is correct for your computer.
-parent_path = "C:\\Users\\fluff\\PycharmProjects\\pythonProject9\\"
+parent_path = "C:\\Users\\jared\\Code\\HallBot\\"
 
 # Database Object
 # Acts as a folder holding the tables within the database
+
+
 class HallBotDB(object):
     # Initialize the database with just a name which will be the name of the folder.
     # Creates the list of tables, named database.
@@ -66,7 +68,8 @@ class HallBotDB(object):
             self.get_table(table_name).ID = lines.pop(0)[:-1]
             for line in lines:
                 print(line[:-1].split(":"))
-                self.get_table(table_name).add_attribute(Attribute(line[:-1].split(":"), False, True))
+                self.get_table(table_name).add_attribute(
+                    Attribute(line[:-1].split(":"), False, True))
 
     # Saves the database to memory.
     # Will overwrite any files or folders with the same names.
@@ -113,7 +116,8 @@ class Table(object):
         else:
             header_attribute = Attribute(headers, True, True)
             self.attributes.append(header_attribute)
-        self.ID = str(''.join(random.choices(string.ascii_letters + string.digits, k=ID_Length)))
+        self.ID = str(''.join(random.choices(
+            string.ascii_letters + string.digits, k=ID_Length)))
 
     # Adds an attribute to the attributes list.
     # Effectively adds a row to your table.
@@ -161,7 +165,8 @@ class Attribute(object):
         self.values = values
         self.header = header
         if copy is None:
-            self.ID = str(''.join(random.choices(string.ascii_letters + string.digits, k=ID_Length)))
+            self.ID = str(''.join(random.choices(
+                string.ascii_letters + string.digits, k=ID_Length)))
             if header:
                 self.values.insert(0, "ID")
             else:
@@ -173,7 +178,7 @@ class Attribute(object):
             returnStr += '{0: >36}'.format(" " + str(each) + " |")
         return returnStr
 
-"""
+
 test_db = HallBotDB("Test")
 test_db.create_table("Players", ["Name", "RPS Score"])
 test_db.get_table("Players").add_attribute(Attribute(["test_name1", 2], False))
@@ -182,9 +187,10 @@ print(test_db)
 test_db.dumpdb()
 copy_test_db = HallBotDB("Test")
 print(copy_test_db)
-copy_test_db.get_table("Players").add_attribute(Attribute(["test_name3", 3], False))
+copy_test_db.get_table("Players").add_attribute(
+    Attribute(["test_name3", 3], False))
 copy_test_db.create_table("Servers", ["Server"])
-copy_test_db.get_table("Servers").add_attribute(Attribute(["server_name"], False))
+copy_test_db.get_table("Servers").add_attribute(
+    Attribute(["server_name"], False))
 print(copy_test_db)
 copy_test_db.dumpdb()
-"""
