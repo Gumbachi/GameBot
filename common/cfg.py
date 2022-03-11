@@ -32,5 +32,7 @@ class Emoji:
     ROCK = "\U0001faa8"
     PAPER = "\U0001f4c3"
     SCISSORS = "\u2702"
+    WHITE_SQUARE = "⬜"
+    GREEN_SQUARE = "🟩"
+    YELLOW_SQUARE = "🟨"
     POOLBALL = "🎱"
-
