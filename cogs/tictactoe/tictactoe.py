@@ -5,6 +5,7 @@ from discord import ButtonStyle, Embed
 from common.cfg import Emoji
 from typing import List
 from .game import Game
+import database
 
 
 class TicTacToe(discord.Cog):
