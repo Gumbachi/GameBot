@@ -77,7 +77,7 @@ class Polls(discord.Cog):
 
     @slash_command(name="poll", guild_ids=devguilds)
     async def poll(self, ctx, question: str, timeout: Optional[int] = 0):
-        """Command to check if bot is alive or if you need a friend."""
+        """Make A Poll"""
 
         poll = Poll(question, timeout)
         message = await ctx.respond(embed=poll.embed, view=poll.controller)

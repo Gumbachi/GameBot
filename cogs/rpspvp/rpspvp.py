@@ -11,6 +11,7 @@ class RPSpvp(discord.Cog):
 
     @slash_command(name="rps", guild_ids=devguilds)
     async def startgame(self, ctx, opponent: discord.Member):
+        """Play Rock Paper Scissors against someone"""
         game_instance = PVPGame(ctx.author, opponent)
         self.instances[ctx.guild.id] = game_instance
         await ctx.respond(embed=game_instance.embed, view=game_instance.controller)

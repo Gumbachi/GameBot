@@ -18,6 +18,10 @@ class GuessMe(discord.Cog):
         response = await self.bot.wait_for('message')
         guess = int(response.content)
 
+        if guess > max:
+            errembed = discord.Embed(title=f'The number {guess} is out of bounds please choose another')
+            await message.edit(embed=errembed)
+
         if guess == correct_number:
             winEmbed = discord.Embed(title=f'You Picked The Correct Number!', color=discord.Color.green(), description=f'You picked {guess} and Won!')
             await message.edit(embed=winEmbed)
