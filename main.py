@@ -9,6 +9,7 @@ async def on_ready():
     """Bot is now ready to rumble."""
     print("Ready to go")
 
+# load extensions from the cogs dir
 # .py files in cogs that are not cogs
 ignored = [
     "cogs.music.buttons",
@@ -16,6 +17,8 @@ ignored = [
     "cogs.music.song",
     "cogs.tictactoe.game",
     "cogs.rpspvp.game",
+    "cogs.connect_four.game",
+    "cogs.connect_four.buttons",
 ]
 
 if __name__ == '__main__':

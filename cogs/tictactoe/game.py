@@ -27,44 +27,64 @@ class Game:
     def checkWin(self):
         # check horizontal X
         if self.board[0].label == "X" and self.board[1].label == "X" and self.board[2].label == "X":
+            self.close_game()
             return "X"
         elif self.board[3].label == "X" and self.board[4].label == "X" and self.board[5].label == "X":
+            self.close_game()
             return "X"
         elif self.board[6].label == "X" and self.board[7].label == "X" and self.board[8].label == "X":
+            self.close_game()
             return "X"
         # check horizontal O
         elif self.board[0].label == "O" and self.board[1].label == "O" and self.board[2].label == "O":
+            self.close_game()
             return "O"
         elif self.board[3].label == "O" and self.board[4].label == "O" and self.board[5].label == "O":
+            self.close_game()
             return "O"
         elif self.board[6].label == "O" and self.board[7].label == "O" and self.board[8].label == "O":
+            self.close_game()
             return "O"
         # check vertical X
-        elif self.board[0].label == "X" and self.board[4].label == "X" and self.board[6].label == "X":
+        elif self.board[0].label == "X" and self.board[3].label == "X" and self.board[6].label == "X":
+            self.close_game()
             return "X"
-        elif self.board[1].label == "X" and self.board[5].label == "X" and self.board[7].label == "X":
+        elif self.board[1].label == "X" and self.board[4].label == "X" and self.board[7].label == "X":
+            self.close_game()
             return "X"
-        elif self.board[2].label == "X" and self.board[6].label == "X" and self.board[8].label == "X":
+        elif self.board[2].label == "X" and self.board[5].label == "X" and self.board[8].label == "X":
+            self.close_game()
             return "X"
         # check vertical O
-        elif self.board[0].label == "O" and self.board[4].label == "O" and self.board[6].label == "O":
+        elif self.board[0].label == "O" and self.board[3].label == "O" and self.board[6].label == "O":
+            self.close_game()
             return "O"
-        elif self.board[1].label == "O" and self.board[5].label == "O" and self.board[7].label == "O":
+        elif self.board[1].label == "O" and self.board[4].label == "O" and self.board[7].label == "O":
+            self.close_game()
             return "O"
-        elif self.board[2].label == "O" and self.board[6].label == "O" and self.board[8].label == "O":
+        elif self.board[2].label == "O" and self.board[5].label == "O" and self.board[8].label == "O":
+            self.close_game()
             return "O"
         # check diagonal X
         elif self.board[0].label == "X" and self.board[4].label == "X" and self.board[8].label == "X":
+            self.close_game()
             return "X"
         elif self.board[2].label == "X" and self.board[4].label == "X" and self.board[6].label == "X":
+            self.close_game()
             return "X"
-        #check diagonal O
+        # check diagonal O
         elif self.board[0].label == "O" and self.board[4].label == "O" and self.board[8].label == "O":
+            self.close_game()
             return "O"
         elif self.board[2].label == "O" and self.board[4].label == "O" and self.board[6].label == "O":
+            self.close_game()
             return "O"
         else:
             return
+
+    def close_game(self):
+        for button in self.board:
+            button.disabled = True
 
 
 class TicTacToeButton(discord.ui.Button):
@@ -76,15 +96,18 @@ class TicTacToeButton(discord.ui.Button):
     async def callback(self, interaction: discord.Interaction):
         if interaction.user != self.game.turn:
             return
-        self.disabled = True
         self.label = self.game.label
+        self.disabled = True
 
         if self.game.checkWin() == "O":
             print("O wins")
-            await interaction.response.edit_message(content="O wins")
-        if self.game.checkWin() == "X":
-            await interaction.response.edit_message(content="X wins")
-            print("X wins")
+            await interaction.response.send_message(view=self.game.view, content=f"{self.game.turn} (O) wins")
+            return
 
-        self.game.change_turn()
+        elif self.game.checkWin() == "X":
+            print("X wins")
+            await interaction.response.send_message(view=self.game.view, content=f"{self.game.turn} (X) wins")
+            return
+
         await interaction.response.edit_message(view=self.game.view)
+        self.game.change_turn()

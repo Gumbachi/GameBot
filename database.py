@@ -5,7 +5,7 @@ import shutil
 
 ID_Length = 16
 # Make sure that the path is correct for your computer.
-parent_path = "C:\\Users\\Ryguy\\OneDrive\\Documents\\GitHub\\HallBot\\"
+parent_path = os.path.abspath(os.getcwd())
 
 # Database Object
 # Acts as a folder holding the tables within the database
@@ -178,8 +178,7 @@ class Attribute(object):
             returnStr += '{0: >36}'.format(" " + str(each) + " |")
         return returnStr
 
-"""
-test_db = HallBotDB("Test")
+"""test_db = HallBotDB("Test")
 test_db.create_table("Players", ["Name", "RPS Score"])
 test_db.get_table("Players").add_attribute(Attribute(["test_name1", 2], False))
 test_db.get_table("Players").add_attribute(Attribute(["test_name2", 5], False))
