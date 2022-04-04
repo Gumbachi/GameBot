@@ -11,7 +11,6 @@ class TicTacToe(discord.Cog):
     O = -1
     X = 1
     draw = 2
-
     def __init__(self, bot):
         self.bot = bot
         self.current_player = self.X
