@@ -14,9 +14,11 @@ class Game:
         ]
         self.tries = 6
         self.guessed_letters = []
-        self.word = self.word_list[random.randint(0, len(self.word_list)-1)]
+        self.word = list(self.word_list[random.randint(0, len(self.word_list)-1)])
         print(self.word)
-        self.progress = "-" * len(self.word)
+        self.progress = []
+        for c in self.word:
+            self.progress.append("-")
 
     def set_word(self, word):
         self.word = word
@@ -38,11 +40,13 @@ class Game:
         return False
 
     def guess_letter(self, guess):
-        #if guess not in self.guessed_letters:
         self.guessed_letters.append(guess)
+        if self.tries <= 0:
+            return
         if guess in self.word and self.tries > 0:
-            self.progress = "".join(
-                ["-" if c not in self.guessed_letters else guess for c in self.word])
+            for i in range(len(self.word)):
+                if guess == self.word[i]:
+                    self.progress[i] = guess
             return True
         else:
             self.tries -= 1

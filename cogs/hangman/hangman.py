@@ -28,13 +28,16 @@ class hangman_game(discord.Cog):
             return
         if len(message.content.lower()) == 1:
             if game.guess_letter(message.content.lower()):
-                await message.reply(f"Correct! Current progress: {game.progress}\nRemaining tries: {game.tries}")
+                await message.reply(f"Correct! Current progress: {''.join(game.progress)}\nRemaining tries: {game.tries}")
             else:
-                await message.reply(f"Wrong. Current progress: {game.progress}\nRemaining tries: {game.tries}")
+                await message.reply(f"Wrong. Current progress: {''.join(game.progress)}\nRemaining tries: {game.tries}")
 
         if game.check_win():
-            game.tries = 0
             await message.reply(f"You win!")
+
+        if game.check_loss():
+            await message.reply(f"You lose... the word was {''.join(game.word)}")
+            game.set_tries(0)
 
 
 def setup(bot):
