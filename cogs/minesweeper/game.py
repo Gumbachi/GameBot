@@ -16,7 +16,6 @@ class Game:
         self.flags = []
         self.placing_flag = False
         self.placemines(mines)
-        self.reveal_mines()
 
     def __str__(self):
         line = "|-----------------------------------|\n"
