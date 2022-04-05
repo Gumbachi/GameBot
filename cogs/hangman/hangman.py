@@ -15,7 +15,7 @@ class hangman_game(discord.Cog):
     async def start_game(self, ctx):
         game = Game()
         self.instances[ctx.guild.id] = game
-        await ctx.respond(f"Hangman game: {game.progress}")
+        await ctx.respond(f"Hangman game: {''.join(game.progress)}")
 
     @discord.Cog.listener()
     async def on_message(self, message):
@@ -26,6 +26,7 @@ class hangman_game(discord.Cog):
             return
         if game.tries <= 0:
             return
+
         if len(message.content.lower()) == 1:
             if game.guess_letter(message.content.lower()):
                 await message.reply(f"Correct! Current progress: {''.join(game.progress)}\nRemaining tries: {game.tries}")
@@ -33,10 +34,10 @@ class hangman_game(discord.Cog):
                 await message.reply(f"Wrong. Current progress: {''.join(game.progress)}\nRemaining tries: {game.tries}")
 
         if game.check_win():
-            await message.reply(f"You win!")
+            await message.reply(f"You win! The word was: {''.join(game.word)}")
 
         if game.check_loss():
-            await message.reply(f"You lose... the word was {''.join(game.word)}")
+            await message.reply(f"You lose... the word was: {''.join(game.word)}")
             game.set_tries(0)
 
 
