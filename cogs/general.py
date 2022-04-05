@@ -14,7 +14,6 @@ class GeneralCommands(discord.Cog):
     @slash_command(name="howdy", guild_ids=devguilds)
     async def howdy(self, ctx):
         """Command to check if bot is alive or if you need a friend."""
-        print("HOWDY")
         await ctx.respond(f"Howdy {ctx.author.mention}!")
 
     @discord.Cog.listener()
