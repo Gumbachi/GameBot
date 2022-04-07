@@ -20,12 +20,6 @@ class Game:
         random.shuffle(self.deck)
         self.deal_initial_cards()
 
-        self._playerindex = 0
-
-    @property
-    def turn(self):
-        return self.players[self._playerindex]
-
     @property
     def embed(self):
         """Formats the game into a discord Embed."""
@@ -38,10 +32,8 @@ class Game:
         )
 
         for player in self.players:
-            turn = "⭐" if player == self.turn else ""
-
             embed.add_field(
-                name=f"{turn} {player.name} ({player.total}) {player.locked}",
+                name=f"{player.name} ({player.total}) {player.locked}",
                 value=player.hand
             )
 
@@ -50,6 +42,12 @@ class Game:
     @property
     def view(self) -> discord.ui.View:
         return BlackjackView(self)
+
+    def find_player_by_id(self, id: int):
+        """Find a player based on their id."""
+        for player in self.players:
+            if player.id == id:
+                return player
 
     def deal_cards(self, player: Player, amount: int = 1):
         """Remove card(s) from the deck and add to a players hand"""
@@ -62,9 +60,6 @@ class Game:
         for player in self.players:
             self.deal_cards(player, 2)
 
-    def cycle_to_next_player(self):
-        """Moves the player index up or cycles it around"""
-        if self._playerindex + 1 == len(self.players):
-            self._playerindex = 0
-        else:
-            self._playerindex += 1
+    def all_locked_in(self):
+        """Check if all players are finished drawing."""
+        return all([not p.playable for p in self.players])

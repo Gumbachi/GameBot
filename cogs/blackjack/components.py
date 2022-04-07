@@ -25,14 +25,10 @@ class StandButton(discord.ui.Button):
 
     async def callback(self, interaction: discord.Interaction):
 
-        player = self.game.turn
-
-        # if interaction.user != self.game.turn:
-        #     return
+        player = self.game.find_player_by_id(interaction.user.id)
 
         player.playable = False  # disable player from playing
 
-        self.game.cycle_to_next_player()
         await interaction.response.edit_message(embed=self.game.embed)
 
 
@@ -43,13 +39,15 @@ class HitButton(discord.ui.Button):
 
     async def callback(self, interaction: discord.Interaction):
 
-        player = self.game.turn
+        player = self.game.find_player_by_id(interaction.user.id)
 
-        if not player.playable:
+        if not player or not player.playable:
             return
 
-        self.game.deal_cards(player)
+        self.game.deal_cards(player, amount=1)
 
-        self.game.cycle_to_next_player()
+        if player.total > 21:
+            print(f"{player.name} busted")
+            player.playable = False
 
         await interaction.response.edit_message(embed=self.game.embed)

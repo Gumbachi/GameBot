@@ -3,10 +3,15 @@ from cogs.blackjack.game import Game
 from cogs.blackjack.player import Player
 
 
+class DummyUser:
+    def __init__(self):
+        self.id = 1
+
+
 class BlackjackTests(unittest.TestCase):
 
     def test_populate_deck(self):
-        game = Game(["Dummy Player"])
+        game = Game([DummyUser()])
         expected = [
             'A♠', 'A♥', 'A♣', 'A♦', '2♠', '2♥', '2♣', '2♦',
             '3♠', '3♥', '3♣', '3♦', '4♠', '4♥', '4♣', '4♦',
@@ -18,16 +23,28 @@ class BlackjackTests(unittest.TestCase):
         self.assertCountEqual(expected, game.deck)
 
     def test_calculate_total(self):
-        player = Player("dummy")
+        player = Player(DummyUser())
 
         # Testing with Ace
-        player.hand = ['A♠', '7♥']
+        player.cards = ['A♠', '7♥']
         expected = 18
         actual = player.total
         self.assertEqual(expected, actual)
 
         # Testing with 10 and face card
-        player.hand = ['K♠', '10♥']
+        player.cards = ['K♠', '10♥']
         expected = 20
+        actual = player.total
+        self.assertEqual(expected, actual)
+
+        # Testing with Aces
+        player.cards = ['A♠', 'A♥', 'A♣', '10♣']
+        expected = 13
+        actual = player.total
+        self.assertEqual(expected, actual)
+
+        # More Ace testing
+        player.cards = ['A♠', 'A♥', '6♣']
+        expected = 18
         actual = player.total
         self.assertEqual(expected, actual)
