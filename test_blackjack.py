@@ -1,11 +1,17 @@
 import unittest
+from unittest.mock import MagicMock
+
+
 from cogs.blackjack.game import Game
 from cogs.blackjack.player import Player
+
+from discord import Member
 
 
 class DummyUser:
     def __init__(self):
         self.id = 1
+        self.bot = False
 
 
 class BlackjackTests(unittest.TestCase):

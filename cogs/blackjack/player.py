@@ -4,11 +4,13 @@ from cogs.blackjack.constants import VALUES
 
 
 class Player():
-    def __init__(self, user: discord.Member):
+    def __init__(self, user: discord.Member = None):
+
         self.user = user
         self.id = self.user.id
         self.cards: list[str] = []  # The users cards
         self.playable = True
+        self.win = False
 
     def __eq__(self, other: discord.User):
         if not isinstance(other, (discord.User, Player)):
@@ -24,10 +26,21 @@ class Player():
 
     @property
     def total(self):
+
+        # put aces at the back for calculation
+        self.cards.sort(key='A'.__eq__)
+
         total = 0
         for card in self.cards:
             cardface = card[:-1]  # Cut out the suit
-            total += VALUES[cardface]
+
+            if cardface == 'A':
+                if total + 11 > 21:
+                    total += 1
+                else:
+                    total += 11
+            else:
+                total += VALUES[cardface]
         return total
 
     @property
@@ -38,3 +51,7 @@ class Player():
     @property
     def locked(self):
         return "🔓" if self.playable else "🔒"
+
+    @property
+    def busted(self):
+        return self.total > 21

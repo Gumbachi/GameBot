@@ -29,8 +29,6 @@ class Blackjack(discord.Cog):
         # filter out None
         players = [player for player in players if player]
 
-        print(f"STARTING GAME WITH {players}")
-
         game = Game(players)
         await ctx.respond(embed=game.embed, view=game.view)
 

@@ -23,19 +23,30 @@ class StandButton(discord.ui.Button):
         super().__init__(label="STAND")
         self.game = game
 
+        if self.game.isfinished:
+            self.disabled = True
+
     async def callback(self, interaction: discord.Interaction):
 
         player = self.game.find_player_by_id(interaction.user.id)
 
         player.playable = False  # disable player from playing
 
-        await interaction.response.edit_message(embed=self.game.embed)
+        # Finish the game
+        if self.game.all_locked_in():
+            self.game.play_dealer()
+            self.game.determine_winner()
+
+        await interaction.response.edit_message(embed=self.game.embed, view=self.game.view)
 
 
 class HitButton(discord.ui.Button):
     def __init__(self, game: 'Game'):
         super().__init__(label="HIT")
         self.game = game
+
+        if self.game.isfinished:
+            self.disabled = True
 
     async def callback(self, interaction: discord.Interaction):
 
@@ -50,4 +61,9 @@ class HitButton(discord.ui.Button):
             print(f"{player.name} busted")
             player.playable = False
 
-        await interaction.response.edit_message(embed=self.game.embed)
+        # Finish the game
+        if self.game.all_locked_in():
+            self.game.play_dealer()
+            self.game.determine_winner()
+
+        await interaction.response.edit_message(embed=self.game.embed, view=self.game.view)
