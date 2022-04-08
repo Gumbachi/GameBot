@@ -19,6 +19,7 @@ ignored = [
     "cogs.rpspvp.game",
     "cogs.connect_four.game",
     "cogs.connect_four.buttons",
+    "cogs.trivia.game",
 ]
 
 if __name__ == '__main__':
