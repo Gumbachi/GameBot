@@ -45,7 +45,7 @@ class TriviaButtonTrue(discord.ui.Button):
         for button in self.game.buttons:
             button.disabled = True
 
-        if self.game.question[1] == True:
+        if self.game.question_is_true():
             await interaction.response.edit_message(view=self.game.view, content="You were correct, the answer was true.")
         else:
             await interaction.response.edit_message(view=self.game.view, content="You were incorrect, the answer was false.")
@@ -60,7 +60,7 @@ class TriviaButtonFalse(discord.ui.Button):
         for button in self.game.buttons:
             button.disabled = True
 
-        if self.game.question[1] == False:
+        if self.game.question_is_false():
             await interaction.response.edit_message(view=self.game.view, content="You were correct, the answer was false")
         else:
             await interaction.response.edit_message(view=self.game.view, content="You were incorrect, the answer was true.")
